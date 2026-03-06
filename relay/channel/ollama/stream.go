@@ -166,13 +166,13 @@ func ollamaStreamHandler(c *gin.Context, info *relaycommon.RelayInfo, resp *http
 		}
 		// emit stop delta (only for OpenAI format to avoid duplicate events)
 		if stop := helper.GenerateStopResponse(responseId, created, model, finishReason); stop != nil {
-			if data, err := common.Marshal(stop); err == nil {
+			// if data, err := common.Marshal(stop); err == nil {
 				lastStreamData = string(data)
 				// Only send stop event for OpenAI format; Claude/Gemini formats will handle it in HandleFinalResponse
-				if info.RelayFormat == types.RelayFormatOpenAI {
+				// if info.RelayFormat == types.RelayFormatOpenAI {
 					_ = openai.HandleStreamFormat(c, info, string(data), false, false)
-				}
-			}
+				// }
+			// }
 		}
 		// Handle final response based on format
 		openai.HandleFinalResponse(c, info, lastStreamData, responseId, created, model, "", usage, false)
